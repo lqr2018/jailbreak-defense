@@ -1,1 +1,8 @@
+anthropic==0.42.0
+fschat==0.2.36
+openai==1.59.7
+packaging==24.2
 setuptools==75.1.0
+torch==2.5.1
+tqdm==4.67.1
+transformers==4.48.0
