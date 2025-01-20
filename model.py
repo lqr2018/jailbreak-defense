@@ -220,7 +220,7 @@ def get_model_path(model_name):
     return FULL_MODEL_DICT[model_name]["path"]
 
 
-def get_template_path(model_name):
+def get_template_name(model_name):
     if model_name not in FULL_MODEL_DICT:
         print(f"No model with name '{model_name}' found in the model dict.")
         return None
@@ -233,3 +233,114 @@ def get_template_path(model_name):
     return template
 
 
+class TargetLM:
+    """
+    Base class for target language models.
+
+    Generates responses for prompts using a language model.
+    The self.model attribute contains the underlying generation model.
+    """
+
+    def __init__(self,
+                 model_name: str = None,
+                 max_new_tokens: int = 300,
+                 max_memory: int = None,
+                 temperature: float = 0.0,
+                 top_p: float = 1.0,
+                 preloaded_model: object = None,
+                 batch_size: int = 1,
+                 template_name: str = None,
+                 template: 'fastchat.conversation.Conversation' = None,
+                 load_in_8bit: bool = False,
+                 ):
+        self.model_name = model_name
+        self.max_new_tokens = max_new_tokens
+        self.temperature = temperature
+        self.top_p = top_p
+        self.batch_size = batch_size
+
+        if load_in_8bit:
+            self.quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+        else:
+            self.quantization_config = None
+
+        assert model_name is not None or preloaded_model is not None
+
+        if preloaded_model is None:
+            self.model = load_model(
+                model_name,
+                max_memory=max_memory,
+                quantization_config=self.quantization_config
+            )
+        else:
+            self.model = preloaded_model
+
+        if template_name is not None:
+            self.template = template
+        else:
+            if template_name is None:
+                template_name = get_template_name(model_name)
+            if template_name is not None:
+                self.template = conv_template(template_name)
+            else:
+                self.template = None
+
+    def get_response(self, prompts_list, template=None, verbose=False, **kwargs):
+        only_one_prompt = isinstance(prompts_list, str)
+        if only_one_prompt:
+            prompts_list = [prompts_list]
+
+        if template is None:
+            template = self.template
+
+        batch_size = len(prompts_list)
+        convs_list = [copy.deepcopy(template) for _ in range(batch_size)]
+        full_prompts = []
+        if self.template is not None:
+            for conv, prompt in zip(convs_list, prompts_list):
+                if isinstance(prompt, str):
+                    conv.append_message(conv.roles[0], prompt)
+                elif isinstance(prompt, list):
+                    for i, p in enumerate(prompt):
+                        conv.append_message(conv.roles[i % 2], p)
+                else:
+                    raise NotImplementedError
+
+                if self.model_name is not None and "gpt" in self.model_name:
+                    # openai does not have separators
+                    full_prompts.append(conv.to_openai_api_messages())
+                else:
+                    conv.append_message(conv.roles[1], None)
+                    full_prompts.append(conv.get_prompt())
+
+        else:
+            convs = [
+                [{'role': 'user','content': c}] for c in prompts_list
+            ]
+            assert hasattr(self.model, "tokenizer"), "The model must be a huggingface model with a tokenizer if no chat template is provided."
+            full_prompts = [self.model.tokenizer.apply_chat_template(conv, tokenize=False, add_generation_prompt=True)
+                            for conv in convs]
+
+        if verbose:
+            print(f"Calling the TargetLM with {len(full_prompts)} prompts")
+        output_list = []
+        for i in tqdm(range((len(full_prompts) - 1) // self.batch_size + 1),
+                      desc="Target model inference on batch: ",
+                      disable=(not verbose)):
+            # get the current batch of inputs
+            batch = full_prompts[i * self.batch_size:(i + 1) * self.batch_size]
+            batch_outputs = self.model.batch_generate(
+                batch,
+                max_new_tokens=self.max_new_tokens,
+                temperature=self.temperature,
+                top_p=self.top_p
+            )
+            output_list.extend(batch_outputs)
+
+        if only_one_prompt:
+            return output_list[0]
+        else:
+            return output_list
+
+    def evaluate(self, prompt, response):
+        return self.model.evaluate_log_likelihood(prompt, response)
