@@ -344,3 +344,29 @@ class TargetLM:
 
     def evaluate_log_likelihood(self, prompt, response):
         return self.model.evaluate_log_likelihood(prompt, response)
+
+
+class DefendedTargetLM():
+    def __init__(self, target_model, defense):
+        self.target_model = target_model
+        self.defense = defense
+
+    def get_response(self, prompts_list, responses_list=None, verbose=False):
+        only_one_prompt = isinstance(prompts_list, str)
+        if only_one_prompt:
+            prompts_list = [prompts_list]
+
+        if responses_list is not None:
+            assert len(responses_list) == len(prompts_list)
+        else:
+            responses_list = [None] * len(prompts_list)
+        defended_response = [
+            self.defense.defense(
+                prompt, self.target_model, response=response
+            ) for prompt, response in zip(prompts_list, responses_list)
+        ]
+
+        return defended_response[0] if only_one_prompt else defended_response
+
+    def evaluate_log_likelihood(self, prompt, response):
+        return self.target_model.evaluate_log_likelihood(prompt, response)
