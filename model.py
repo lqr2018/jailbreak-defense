@@ -342,5 +342,5 @@ class TargetLM:
         else:
             return output_list
 
-    def evaluate(self, prompt, response):
+    def evaluate_log_likelihood(self, prompt, response):
         return self.model.evaluate_log_likelihood(prompt, response)
