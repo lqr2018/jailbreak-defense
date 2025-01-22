@@ -285,7 +285,7 @@ class TargetLM:
             else:
                 self.template = None
 
-    def get_response(self, prompts_list, template=None, verbose=False, **kwargs):
+    def get_response(self, prompts_list, template=None, display=False, **kwargs):
         only_one_prompt = isinstance(prompts_list, str)
         if only_one_prompt:
             prompts_list = [prompts_list]
@@ -321,12 +321,12 @@ class TargetLM:
             full_prompts = [self.model.tokenizer.apply_chat_template(conv, tokenize=False, add_generation_prompt=True)
                             for conv in convs]
 
-        if verbose:
+        if display:
             print(f"Calling the TargetLM with {len(full_prompts)} prompts")
         output_list = []
         for i in tqdm(range((len(full_prompts) - 1) // self.batch_size + 1),
                       desc="Target model inference on batch: ",
-                      disable=(not verbose)):
+                      disable=(not display)):
             # get the current batch of inputs
             batch = full_prompts[i * self.batch_size:(i + 1) * self.batch_size]
             batch_outputs = self.model.batch_generate(
@@ -351,7 +351,7 @@ class DefendedTargetLM():
         self.target_model = target_model
         self.defense = defense
 
-    def get_response(self, prompts_list, responses_list=None, verbose=False):
+    def get_response(self, prompts_list, responses_list=None, display=False):
         only_one_prompt = isinstance(prompts_list, str)
         if only_one_prompt:
             prompts_list = [prompts_list]

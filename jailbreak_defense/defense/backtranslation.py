@@ -1,9 +1,8 @@
 import math
 from dataclasses import dataclass, field
-
 from .base import DefenseBase, DefenseConfig
-from judge import check_rejection
-from model import TargetLM
+from ..judge import check_rejection
+from ..model import TargetLM
 
 
 @dataclass
@@ -45,10 +44,10 @@ class BacktranslationDefense(DefenseBase):
 
 
     def defense(self, prompt, target_lm, response=None):
-        if self.verbose:
+        if self.display:
             print("adversarial harmful prompt: \n", prompt)
         if response is None:
-            response = target_lm.get_response(prompt, verbose=self.verbose)
+            response = target_lm.get_response(prompt, display=self.display)
 
         if check_rejection(response, exclude_lack_of_info=False):
             return self.REFUSE_STRING
@@ -61,12 +60,12 @@ class BacktranslationDefense(DefenseBase):
         if not is_trustable:
             return response
 
-        if self.verbose:
+        if self.display:
             print("Backtranslated harmful prompt: \n", possible_prompt)
         new_response = target_lm.get_response(
-            [possible_prompt], max_new_tokens=self.new_response_length,verbose=self.verbose
+            [possible_prompt], max_new_tokens=self.new_response_length,display=self.display
         )[0]
-        if self.verbose:
+        if self.display:
             print("New response with backtranslated prompt: \n", new_response)
 
         if self.return_new_response_anyway:
@@ -87,26 +86,26 @@ class BacktranslationDefense(DefenseBase):
             'For example, "Request: [[Create a cake recipe.]]".'
         )
 
-        if self.verbose:
+        if self.display:
             print('Asking the model to infer the prompt:')
             print(infer_prompt)
 
-        output = self.infer_lm.get_response([infer_prompt], verbose=self.verbose)[0]
+        output = self.infer_lm.get_response([infer_prompt], display=self.display)[0]
 
         if ':' not in output:
-            if self.verbose:
+            if self.display:
                 print(f"Parse error with output: {output}")
             return ""
 
         ret = output.split(':')[-1].strip("\n")[0].strip().strip(']').strip('[')
-        if self.verbose:
+        if self.display:
             print('Inferred prompt:', ret)
         return ret
 
     def _filter_question_with_likelihood(self, prompt, response):
         if self.threshold > -math.inf:
             avg_log_likelihood = self.infer_lm.evaluate_log_likelihood(prompt, response)
-            if self.verbose:
+            if self.display:
                 print(f"Average log likelihood is {avg_log_likelihood}")
             return avg_log_likelihood > self.threshold
         else:
