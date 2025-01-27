@@ -1,6 +1,6 @@
 anthropic==0.42.0
 fschat==0.2.36
-openai==1.59.7
+openai==1.59.9
 packaging==24.2
 setuptools==75.1.0
 torch==2.5.1

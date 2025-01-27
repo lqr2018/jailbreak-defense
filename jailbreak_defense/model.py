@@ -9,7 +9,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from fastchat.model import get_conversation_template
 from fastchat.conversation import (Conversation, SeparatorStyle,
                                    register_conv_template, get_conv_template)
-from language_model import GPT, Claude, HuggingFace
+from .language_model import GPT, Claude, HuggingFace
 
 FULL_MODEL_DICT = {
     "gpt-4o-mini": {
@@ -153,6 +153,7 @@ def load_model(model_name, max_memory=None, quantization_config=None, **kwargs):
         if max_memory is not None:
             max_memory = {i: f"{max_memory}MB"
                           for i in range(torch.cuda.device_count())}
+        # print(model_path)
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
             low_cpu_mem_usage=True,

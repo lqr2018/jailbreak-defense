@@ -3,11 +3,17 @@ from jailbreak_defense import (DefendedTargetLM, BacktranslationConfig, load_def
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 if __name__ == '__main__':
+    model_name = 'meta-llama/Meta-Llama-3-8B-Instruct'
     # Load the model and tokenizer from Huggingface.
-    transformer_model = AutoModelForCausalLM.from_pretrained('meta-llama/Meta-Llama-3-8B-Instruct').cuda()
-    tokenizer = AutoTokenizer.from_pretrained('meta-llama/Meta-Llama-3-8B-Instruct')
+    transformer_model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        load_in_8bit=True,
+        device_map="auto"
+    )
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
     tokenizer.add_special_tokens({'pad_token': '[PAD]'})
     model = HuggingFace(transformer_model, tokenizer)
+
 
     # Use the preloaded HuggingFace model with a fschat conversation template `gemma`.
     # The maximum number of tokens to generate (`max_new_tokens`) is 300 by default and can be changed here.
