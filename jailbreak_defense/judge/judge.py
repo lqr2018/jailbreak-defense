@@ -1,8 +1,4 @@
-from .no_judge import NoJudge
-
-JUDGE_METHODS = {
-    "no-judge": NoJudge
-}
+from .constant import JUDGE_METHODS
 
 def load_judge_method(judge_name, goal, **kwargs):
     if judge_name not in JUDGE_METHODS:
