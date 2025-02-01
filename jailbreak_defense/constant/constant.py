@@ -1,5 +1,5 @@
-from judge import *
-from defense import *
+from ..judge import *
+from ..defense import *
 
 FULL_MODEL_DICT = {
     "gpt-4o-mini": {
