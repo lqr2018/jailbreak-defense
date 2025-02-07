@@ -130,7 +130,9 @@ DEFENSE_CONFIG_DICT = {
 }
 
 JUDGE_METHODS = {
-    "no-judge": NoJudge
+    "no-judge": NoJudge,
+    "matching": KeywordMatchJudge,
+    "gcg_matching": GCGKeywordMatchJudge
 }
 
 """
