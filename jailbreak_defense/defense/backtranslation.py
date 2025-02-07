@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 from .base import DefenseBase, DefenseConfig
-from ..judge import rejection_judge
+from ..judge import rejection_judge, KeywordMatchJudge
 from ..model import TargetLM
 
 
