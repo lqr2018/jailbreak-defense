@@ -1,4 +1,4 @@
-from .constant import DEFENSE_DICT, DEFENSE_CONFIG_DICT
+from ..constant import DEFENSE_DICT, DEFENSE_CONFIG_DICT
 
 
 def args_to_defense_config(args):

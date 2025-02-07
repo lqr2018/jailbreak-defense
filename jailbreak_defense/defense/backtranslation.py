@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 from .base import DefenseBase, DefenseConfig
-from ..judge import check_rejection
+from ..judge import rejection_judge
 from ..model import TargetLM
 
 
@@ -50,7 +50,7 @@ class BacktranslationDefense(DefenseBase):
         if response is None:
             response = target_lm.get_response(prompt, display=self.display)
 
-        if check_rejection(response, exclude_lack_of_info=False):
+        if rejection_judge(response, exclude_lack_of_info=False):
             return self.REFUSE_STRING
 
         possible_prompt = self._infer_question(response)
@@ -72,7 +72,7 @@ class BacktranslationDefense(DefenseBase):
         if self.return_new_response_anyway:
             return new_response
 
-        if not check_rejection(new_response):
+        if not rejection_judge(new_response):
             return response
 
         return self.REFUSE_STRING

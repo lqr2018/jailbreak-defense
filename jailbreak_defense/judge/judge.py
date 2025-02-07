@@ -1,4 +1,4 @@
-from .constant import JUDGE_METHODS
+from ..constant import JUDGE_METHODS
 from .no_judge import NoJudge
 
 def load_judge_method(judge_name, goal, **kwargs):

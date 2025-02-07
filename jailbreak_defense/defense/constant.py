@@ -1,1 +1,0 @@
-from ..constant import DEFENSE_DICT, DEFENSE_CONFIG_DICT
