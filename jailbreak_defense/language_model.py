@@ -155,6 +155,7 @@ class GPT(LanguageModelBase):
                        top_p: float = 1.0):
         return [self.generate(prompt, max_new_tokens, temperature, top_p) for prompt in prompts]
 
+
 class Claude(LanguageModelBase):
     API_RETRY_SLEEP = 10
     API_ERROR_OUTPUT = "$ERROR$"

@@ -16,11 +16,11 @@ class LMJudge(JudgeBase):
     def create_conv(self, full_prompt):
         raise NotImplementedError()
 
-    def _process_output(self, raw_output):
+    def _extract_content(self, tag, text):
         pattern = r'\[\[(\d+)\]\]'
-        if_match = re.search(pattern, raw_output)
+        if_match = re.search(pattern, text)
         if if_match is None:
-            raise ValueError(f"Error in processing output: {raw_output}")
+            raise ValueError(f"Error in processing output: {text}")
         output = int(if_match.group(1))
         assert 10 >= output >= 1
         return output
