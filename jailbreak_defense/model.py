@@ -9,7 +9,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from fastchat.model import get_conversation_template
 from fastchat.conversation import (Conversation, SeparatorStyle,
                                    register_conv_template, get_conv_template)
-from .language_model import GPT, Claude, HuggingFace
+from .language_models import GPT, Claude, HuggingFace
 from .constant import FULL_MODEL_DICT
 
 
