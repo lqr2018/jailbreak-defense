@@ -1,10 +1,10 @@
 from fastchat.model import get_conversation_template
 from .languagemodel import LMJudge
-from ..language_models import GPT
-from ..constant import pair_judge_template
+from jailbreak_defense.language_models import GPT
+from jailbreak_defense.constant import pair_judge_template
 
 
-class PairGPTJudge(LMJudge):
+class GPTJudgePair(LMJudge):
     """
     The system prompt is copied from https://github.com/patrickrchao/JailbreakingLLMs
     """

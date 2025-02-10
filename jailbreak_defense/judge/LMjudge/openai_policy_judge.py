@@ -1,10 +1,10 @@
 from fastchat.model import get_conversation_template
 from .languagemodel import LMJudge
-from ..language_models import GPT
-from ..constant import openai_judge_template
+from jailbreak_defense.language_models import GPT
+from jailbreak_defense.constant import openai_judge_template
 
 
-class GPTJudge(LMJudge):
+class GPTJudgeOpenAIPolicy(LMJudge):
     """
     the OpenAI Policy is from
     https://github.com/LLM-Tuning-Safety/LLMs-Finetuning-Safety/blob/main/gpt-3.5/eval_utils/openai_policy_gpt4_judge.py

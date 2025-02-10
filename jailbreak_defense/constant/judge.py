@@ -4,7 +4,8 @@ JUDGE_METHODS = {
     "no-judge": NoJudge,
     "matching": KeywordMatchJudge,
     "gcg_matching": GCGKeywordMatchJudge,
-    "openai_policy": GPTJudge
+    "openai_policy": GPTJudgeOpenAIPolicy,
+    "pair": GPTJudgePair
 }
 
 """

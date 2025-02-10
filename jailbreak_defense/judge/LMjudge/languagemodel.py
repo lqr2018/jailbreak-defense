@@ -1,5 +1,5 @@
 import re
-from .base import JudgeBase
+from ..base import JudgeBase
 
 
 class LMJudge(JudgeBase):
