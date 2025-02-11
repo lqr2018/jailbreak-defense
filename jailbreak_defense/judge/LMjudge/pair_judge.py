@@ -6,7 +6,7 @@ from jailbreak_defense.constant import pair_judge_template
 
 class GPTJudgePair(LMJudge):
     """
-    The system prompt is copied from https://github.com/patrickrchao/JailbreakingLLMs
+    The system prompt is from https://github.com/patrickrchao/JailbreakingLLMs
     """
     def __init__(self, goal, model_name="gpt-4", **kwargs):
         super().__init__(goal, model_name)

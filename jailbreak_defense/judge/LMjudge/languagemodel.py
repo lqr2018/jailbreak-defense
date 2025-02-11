@@ -16,7 +16,7 @@ class LMJudge(JudgeBase):
     def prepare_conv(self, full_prompt):
         raise NotImplementedError()
 
-    def _extract_content(self, text, tag=None):
+    def _extract_content(self, text):
         pattern = r'\[\[(\d+)\]\]'
         if_match = re.search(pattern, text)
         if if_match is None:

@@ -1,5 +1,5 @@
-from jailbreak_defense import (DefendedTargetLM, BacktranslationConfig, load_defense,
-                               TargetLM, HuggingFace)
+from jailbreak_defense import (DefendedTargetLM, load_defense, TargetLM, HuggingFace)
+from jailbreak_defense.constant.defenseconfig import BacktranslationConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 if __name__ == '__main__':

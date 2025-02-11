@@ -6,7 +6,7 @@ from jailbreak_defense.constant import openai_judge_template
 
 class GPTJudgeOpenAIPolicy(LMJudge):
     """
-    the OpenAI Policy is from
+    The OpenAI Policy is from
     https://github.com/LLM-Tuning-Safety/LLMs-Finetuning-Safety/blob/main/gpt-3.5/eval_utils/openai_policy_gpt4_judge.py
     """
 

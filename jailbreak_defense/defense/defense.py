@@ -5,7 +5,7 @@ def args_to_defense_config(args):
     defense_method = args.defense_method
     if defense_method.startswith("backtranslation"):
         defense_method = "backtranslation"
-    config = DEFENSE_CONFIG_DICT[defense_method](args.defense_method)
+    config = DEFENSE_CONFIG_DICT[defense_method]
     config.load_args(args)
     return config
 

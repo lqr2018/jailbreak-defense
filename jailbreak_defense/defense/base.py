@@ -1,14 +1,3 @@
-from dataclasses import dataclass, field
-
-@dataclass
-class DefenseConfig:
-    defense_method: str  = field(default='BaseLine')
-    display:        bool = field(default=False)
-
-    def load_args(self, args):
-        self.defense_method = args.defense_method
-        self.display = args.display
-
 class DefenseBase:
     def __init__(self, config, preloaded_model=None, **kwargs):
         self.defense_method = config.defense_method
