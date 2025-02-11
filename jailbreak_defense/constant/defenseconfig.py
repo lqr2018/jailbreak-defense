@@ -24,7 +24,6 @@ class BacktranslationConfig(DefenseConfig):
         self.defense_method = "backtranslation"
 
     def load_args(self, args):
-        # TODO need to be simplified
         super().load_args(args)
         self.threshold = args.backtranslation_threshold
         self.infer_model = args.backtranslation_infer_model
