@@ -1,5 +1,5 @@
 from .base import JudgeBase
-from ..constant import (GCG_REJECTION_PREFIXES, GCG_SHORT_REJECTION_PREFIXES,
+from .constant import (GCG_REJECTION_PREFIXES, GCG_SHORT_REJECTION_PREFIXES,
                         REJECTION_PREFIXES, EXCLUDED_KEYWORDS)
 
 def rejection_judge(response, exclude_lack_of_info=False, rejection_prefixes=REJECTION_PREFIXES, exclude_keywords=EXCLUDED_KEYWORDS):

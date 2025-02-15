@@ -2,8 +2,8 @@ import re
 from fastchat.model import get_conversation_template
 from .languagemodel import LMJudge
 from jailbreak_defense.language_models import GPT
-from jailbreak_defense.constant import quality_judge_template as template
-from jailbreak_defense.constant import quality_judge_template_None_reference as template_for_None_reference
+from .constant import quality_judge_template as template
+from .constant import quality_judge_template_reference as template_reference
 
 
 class QualityJudge(LMJudge):
@@ -20,7 +20,7 @@ class QualityJudge(LMJudge):
         if reference_response is None:
             prompt = template % (attack_prompt, target_response)
         else:
-            prompt = template % (attack_prompt, reference_response, target_response)
+            prompt = template_reference % (attack_prompt, reference_response, target_response)
         return prompt
 
     def prepare_conv(self, full_prompt):
@@ -41,7 +41,8 @@ class QualityJudge(LMJudge):
             max_new_tokens = self.max_new_tokens,
             temperature = self.temperature,
         )
-        outputs = []
+        outputs = [self._extract_content(raw_output) for raw_output in raw_outputs]
+        return outputs
 
     def _extract_content(self, text):
         pattern = r'\[\[(\d+)(\.?)(\d)*\]\]'

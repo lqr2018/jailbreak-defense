@@ -1,7 +1,7 @@
 from fastchat.model import get_conversation_template
 from .languagemodel import LMJudge
+from .constant import pair_judge_template
 from jailbreak_defense.language_models import GPT
-from jailbreak_defense.constant import pair_judge_template
 
 
 class GPTJudgePair(LMJudge):

@@ -1,4 +1,5 @@
-from ..defense import *
+from .base import DefenseBase
+from .backtranslation import BacktranslationDefense
 from .defenseconfig import DefenseConfig_Default, BacktranslationConfig_Default
 
 DEFENSE_DICT = {
@@ -12,4 +13,3 @@ DEFENSE_CONFIG_DICT = {
      None : DefenseConfig_Default,
     'backtranslation': BacktranslationConfig_Default
 }
-
