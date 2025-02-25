@@ -1,16 +1,3 @@
-from .no_judge import NoJudge
-from .keywordmatch import KeywordMatchJudge
-from .keywordmatch import GCGKeywordMatchJudge
-from .LMjudge import GPTJudgeOpenAIPolicy, GPTJudgePair, QualityJudge
-
-JUDGE_METHODS = {
-    "no-judge":     NoJudge,
-    "matching":     KeywordMatchJudge,
-    "gcg_matching": GCGKeywordMatchJudge,
-    "openai_policy":GPTJudgeOpenAIPolicy,
-    "pair":         GPTJudgePair,
-    "quality":      QualityJudge
-}
 
 """
 These two lists are copied from GCG (https://github.com/llm-attacks/llm-attacks)
